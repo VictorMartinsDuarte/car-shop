@@ -13,10 +13,7 @@ export default class ServiceCars implements IService<ICar> {
 
   public async create(obj:ICar):Promise<ICar> {
     const parsedZod = CarZodSchema.safeParse(obj);
-    if (!parsedZod.success) {
-      console.log(parsedZod.error.issues);
-      throw parsedZod.error;
-    }
+    if (!parsedZod.success) throw parsedZod.error;
 
     return this._car.create(obj);
   }
@@ -34,9 +31,18 @@ export default class ServiceCars implements IService<ICar> {
     return carById;
   }
 
-  // public async update(_id: string, _body: T): Promise<ICar | null> {
-  //   throw new Error('Not implementedi');
-  // }
+  public async update(_id: string, obj: ICar): Promise<ICar | null> {
+    if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
+    
+    const parsedZod = CarZodSchema.safeParse(obj);
+    if (!parsedZod.success) throw parsedZod.error;
+
+    const carExists = await this.readOne(_id);
+    console.log(carExists);
+    if (!carExists) throw new Error(ErrorTypes.ObjectNotFound);
+
+    return this._car.update(_id, obj);
+  }
 
   // public async delete(_id: string): Promise<ICar | null> {
   //   throw new Error('Not implementeder');

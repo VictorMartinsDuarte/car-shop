@@ -8,7 +8,7 @@ const errorHandler: ErrorRequestHandler = (
   res,
   _next,
 ) => {
-  console.log('Cheguei aqui');
+  console.log(`ERRO: ${err}`);
   if (err instanceof ZodError) {
     return res.status(400).json({ message: err.issues });
   } 
