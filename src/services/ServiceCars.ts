@@ -1,6 +1,8 @@
+import { isValidObjectId } from 'mongoose';
 import { IService } from '../interfaces/IService';
 import { ICar, CarZodSchema } from '../interfaces/ICar';
 import { IModel } from '../interfaces/IModel';
+import { ErrorTypes } from '../errors/catalog';
 
 export default class ServiceCars implements IService<ICar> {
   private _car:IModel<ICar>;
@@ -23,9 +25,14 @@ export default class ServiceCars implements IService<ICar> {
     return this._car.read();
   }
 
-  // public async readOne(_id: string): Promise<ICar | null> {
-  //   throw new Error('Not implementede');
-  // }
+  public async readOne(_id: string): Promise<ICar | null> {
+    if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
+
+    const carById = await this._car.readOne(_id);
+    if (!carById) throw new Error(ErrorTypes.ObjectNotFound);
+  
+    return carById;
+  }
 
   // public async update(_id: string, _body: T): Promise<ICar | null> {
   //   throw new Error('Not implementedi');

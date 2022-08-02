@@ -11,5 +11,6 @@ const controllerCars = new ControllerCars(serviceCars);
 
 carsRoute.post('/cars', (req, res) => controllerCars.create(req, res));
 carsRoute.get('/cars', (req, res) => controllerCars.read(req, res));
+carsRoute.get('/cars/:id', (req, res) => controllerCars.readOne(req, res));
 
 export default carsRoute;
