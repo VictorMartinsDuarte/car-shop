@@ -37,14 +37,18 @@ export default class ServiceCars implements IService<ICar> {
     const parsedZod = CarZodSchema.safeParse(obj);
     if (!parsedZod.success) throw parsedZod.error;
 
-    const carExists = await this.readOne(_id);
-    console.log(carExists);
+    const carExists = await this._car.readOne(_id);
     if (!carExists) throw new Error(ErrorTypes.ObjectNotFound);
 
     return this._car.update(_id, obj);
   }
 
-  // public async delete(_id: string): Promise<ICar | null> {
-  //   throw new Error('Not implementeder');
-  // }
+  public async delete(_id: string): Promise<ICar | null> {
+    if (!isValidObjectId(_id)) throw new Error(ErrorTypes.InvalidMongoId);
+
+    const removedCar = await this._car.delete(_id);
+    if (!removedCar) throw new Error(ErrorTypes.ObjectNotFound);
+
+    return removedCar;
+  }
 }
