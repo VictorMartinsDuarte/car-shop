@@ -12,5 +12,6 @@ const VehicleZodSchema = z.object({
   buyValue: z.number(),
 });
 
-export type IVehicle = z.infer<typeof VehicleZodSchema>;
-export { VehicleZodSchema };
+type IVehicle = z.infer<typeof VehicleZodSchema>;
+
+export { IVehicle, VehicleZodSchema };

@@ -10,5 +10,6 @@ const CarZodSchema = VehicleZodSchema.extend({
     .lte(7, { message: 'Seats quantity must be less than or equal 4' }),
 });
 
-export type ICar = z.infer<typeof CarZodSchema>;
-export { CarZodSchema };
+type ICar = z.infer<typeof CarZodSchema>;
+
+export { ICar, CarZodSchema };
